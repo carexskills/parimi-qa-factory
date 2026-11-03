@@ -20,8 +20,13 @@ esac
 
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 env_file="$root/environments/$environment.env"
+secrets_file="$root/environments/$environment.secrets.env"
 compose_file="$root/environments/compose.yml"
-compose=(docker compose --env-file "$env_file" -f "$compose_file" -p "parimi-$environment")
+compose=(docker compose --env-file "$env_file")
+if [[ -f "$secrets_file" ]]; then
+  compose+=(--env-file "$secrets_file")
+fi
+compose+=(-f "$compose_file" -p "parimi-$environment")
 
 case "$action" in
   up)

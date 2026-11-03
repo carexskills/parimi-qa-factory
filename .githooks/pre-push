@@ -1,0 +1,24 @@
+#!/bin/sh
+set -eu
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "Push blocked: gitleaks is required but was not found." >&2
+  exit 1
+fi
+
+zero=0000000000000000000000000000000000000000
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -n "${local_sha:-}" ] || continue
+  [ "$local_sha" != "$zero" ] || continue
+
+  if [ "${remote_sha:-$zero}" = "$zero" ]; then
+    log_opts="$local_sha"
+  else
+    log_opts="$remote_sha..$local_sha"
+  fi
+
+  if ! gitleaks protect --log-opts="$log_opts" --redact; then
+    echo "Push blocked: secret found in commits being pushed." >&2
+    exit 1
+  fi
+done

@@ -7,6 +7,8 @@ services:
       APP_ENV: "${APP_ENV}"
       RESET_POLICY: "${RESET_POLICY}"
       SEED_VERSION: "${SEED_VERSION}"
+      JWT_SECRET: "${JWT_SECRET:?Set JWT_SECRET in the environment secrets file}"
+      PARIMIPRACTICE_TOTP_SECRET: "${PARIMIPRACTICE_TOTP_SECRET:?Set PARIMIPRACTICE_TOTP_SECRET in the environment secrets file}"
     volumes:
       - app-data:/data
     healthcheck:
