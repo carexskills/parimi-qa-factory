@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "verify:agents": "node scripts/verify-agents.cjs",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "report": "playwright show-report reports"
