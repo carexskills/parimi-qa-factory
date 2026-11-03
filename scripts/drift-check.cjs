@@ -94,8 +94,7 @@ async function main() {
     add(`Flag ${name}`, show(left), show(right), JSON.stringify(left ?? null) === JSON.stringify(right ?? null));
   }
 
-  const files = fs.readdirSync(path.join(root, 'environments'))
-    .filter((name) => name.endsWith('.env')).sort();
+  const files = ['local', 'preview', 'int', 'uat', 'prod-sim'].map((environment) => `${environment}.env`);
   const byFile = files.map((name) => [name, settingNames(path.join(root, 'environments', name))]);
   const baseline = JSON.stringify(byFile[0]?.[1] || []);
   const sameNames = byFile.every(([, names]) => JSON.stringify(names) === baseline);
