@@ -29,3 +29,7 @@
 
 8. Acceptance specs are written in Gherkin, in specs/<module>/*.feature, and every scenario is tagged with its BR-ID.
 9. Agent plans, reviews and reports are written in Markdown.
+
+## Commits
+
+10. Agents never commit; humans commit. An agent leaves its changes in the working tree for a human to review.
