@@ -1,5 +1,7 @@
 # Booking business rules (approved)
 
+Source: PP-101 (requirements/PP-101.md)
+
 ## BR-BOOK-01 — Future open slots
 
 A patient can book only an open slot in the future.
