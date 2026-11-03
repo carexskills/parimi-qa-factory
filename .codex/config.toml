@@ -11,3 +11,11 @@ command = "npx"
 args = ["-y", "@playwright/mcp@latest", "--isolated", "--browser", "chromium"]
 default_tools_approval_mode = "approve"
 env_vars = ["DISPLAY", "PLAYWRIGHT_BROWSERS_PATH"]
+
+# Playwright Test Agents' own tools (planner_setup_page, planner_save_plan, generator and healer tools) for .codex/agents/*.toml; headed so you can watch
+[mcp_servers.playwright-test]
+command = "npx"
+args = ["playwright", "run-test-mcp-server"]
+default_tools_approval_mode = "approve"
+env_vars = ["DISPLAY", "PLAYWRIGHT_BROWSERS_PATH", "SLOWMO"]
+env = { HEADED = "1" }
