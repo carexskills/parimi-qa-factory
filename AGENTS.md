@@ -24,3 +24,8 @@
 ## Secrets
 
 7. Never put an API key or a token in a prompt, a file or a log.
+
+## Spec format
+
+8. Acceptance specs are written in Gherkin, in specs/<module>/*.feature, and every scenario is tagged with its BR-ID.
+9. Agent plans, reviews and reports are written in Markdown.
