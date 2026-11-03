@@ -1,0 +1,21 @@
+- generic [ref=e147]:
+  - link "ParimiPractice Care network portal" [ref=e148] [cursor=pointer]:
+    - /url: "#/login"
+    - generic [ref=e153]:
+      - text: ParimiPractice
+      - generic [ref=e154]: Care network portal
+  - main [ref=e155]:
+    - generic [ref=e156]:
+      - heading "Page not found" [level=2] [ref=e157]
+      - paragraph [ref=e158]:
+        - text: That page does not exist.
+        - link "Go home" [ref=e159] [cursor=pointer]:
+          - /url: "#/"
+  - contentinfo [ref=e160]:
+    - generic [ref=e161]: ParimiPractice is a fictional training application. Not a real medical service. All names and data are fictional. No PHI.
+    - link "Challenge map" [ref=e162] [cursor=pointer]:
+      - /url: "#/challenges"
+    - generic [ref=e163] [cursor=pointer]:
+      - switch "Chaos mode" [ref=e164]
+      - text: Chaos mode
+    - button "Chaos settings" [ref=e165] [cursor=pointer]
