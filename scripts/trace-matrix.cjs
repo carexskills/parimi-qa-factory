@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
-const dirs = ['tickets', 'requirements', 'business-rules', 'specs', 'tests'];
+const dirs = ['tickets', 'requirements', 'business-rules', 'specs', 'cases', 'tests'];
 const files = dirs.flatMap((dir) => walk(path.join(root, dir)));
 const read = (file) => fs.readFileSync(file, 'utf8');
 const rel = (file) => path.relative(root, file).split(path.sep).join('/');
@@ -60,7 +60,15 @@ for (const file of files) {
       if (br && title && !/^\s*Scenario\s*$/i.test(title)) add(plans, br[0], title.trim(), fileRel);
     }
   }
-  if (/CASE-[A-Z]+-\d{2}-\d{2}/.test(text)) collectPattern(cases, text, fileRel, /CASE-[A-Z]+-\d{2}-\d{2}/g, (m) => m[0]);
+  if (file.startsWith(path.join(root, 'cases')) && /\.md$/i.test(file)) {
+    for (const line of text.split(/\r?\n/)) {
+      const match = line.match(/^\|\s*(CASE-[A-Z]+-\d{2}-\d{2})\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*(BR-[A-Z]+-\d{2}(?:-[A-Z])?)\s*\|/);
+      if (match) {
+        const ruleId = rows.has(match[5]) ? match[5] : match[5].replace(/-[A-Z]$/, '');
+        add(cases, ruleId, `${match[1]} — ${match[3].trim()}`, fileRel);
+      }
+    }
+  }
   if (file.startsWith(path.join(root, 'tests')) && /\.(?:spec|test)\.[cm]?[jt]sx?$/i.test(file)) {
     const titleRe = /(?:test|it)\s*\(\s*['"`]([^'"`]+)['"`][\s\S]*?(?=@(BR-[A-Z]+-\d{2})|$)/g;
     for (const m of text.matchAll(titleRe)) {
