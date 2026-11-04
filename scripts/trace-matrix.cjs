@@ -60,6 +60,23 @@ for (const file of files) {
       if (br && title && !/^\s*Scenario\s*$/i.test(title)) add(plans, br[0], title.trim(), fileRel);
     }
   }
+  // Root Markdown plans use scenario headings with inline BRs (auth/booking)
+  // or BR tags in the following section (consent). Ignore overview tables.
+  if (path.dirname(file) === path.join(root, 'specs') && /\.md$/i.test(file)) {
+    const sections = text.split(/(?=^#{3,6}\s)/m);
+    for (const section of sections) {
+      const heading = section.match(/^#{3,6}\s+(.+)/);
+      if (!heading) continue;
+      const title = heading[1].trim();
+      const taggedLine = section.split(/\r?\n/).find((line) => /^`?@BR-/.test(line.trim())) || '';
+      const brs = [...new Set((title + ' ' + taggedLine).match(brPattern) || [])];
+      if (!brs.length) continue;
+      // Outline rows are independently planned scenarios, not just one heading.
+      const outlineRows = [...section.matchAll(/^\|\s*(C\d{2}[a-z])\s*\|/gm)];
+      const names = outlineRows.length ? outlineRows.map((m) => `${m[1]} — ${title}`) : [title];
+      for (const br of brs) for (const name of names) add(plans, br, name, fileRel);
+    }
+  }
   if (file.startsWith(path.join(root, 'cases')) && /\.md$/i.test(file)) {
     for (const line of text.split(/\r?\n/)) {
       const match = line.match(/^\|\s*(CASE-[A-Z]+-\d{2}-\d{2})\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*(BR-[A-Z]+-\d{2}(?:-[A-Z])?)\s*\|/);
