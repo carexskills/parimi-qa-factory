@@ -33,3 +33,10 @@
 ## Commits
 
 10. Agents never commit; humans commit. An agent leaves its changes in the working tree for a human to review.
+
+## Test code standards
+
+11. Every action and every check is a test.step with a plain-English name.
+12. A step that checks a business rule starts with its BR-ID, like BR-BOOK-06: reason defaults to General visit.
+13. Locators live in page objects only. A test file never contains a locator, and never waits for networkidle or a fixed time.
+14. Cleanup lives in a fixture or an afterEach hook, never in the test body.

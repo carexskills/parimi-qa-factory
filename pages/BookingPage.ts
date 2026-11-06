@@ -33,9 +33,13 @@ export class BookingPage {
     const day = this.dialog.getByRole('grid').getByRole('button', { disabled: false }).first();
     const dateName = await day.getAttribute('aria-label');
     if (!dateName) throw new Error('Available calendar day must have an accessible date.');
+    const dateIso = await day.getAttribute('data-iso');
+    if (!dateIso) throw new Error('Available calendar day must identify its date.');
     await day.click();
+    // The previous date's buttons can remain visible while the new slots load.
     const time = this.dialog.getByRole('group', { name: 'Available times' })
-      .getByRole('button', { disabled: false }).first();
+      .locator(`button[data-start^="${dateIso}T"]`)
+      .and(this.dialog.getByRole('button', { disabled: false })).first();
     await expect(time).toBeVisible();
     const timeName = await time.innerText();
     await time.click();
@@ -53,6 +57,10 @@ export class BookingPage {
 
   appointment(providerName: string, slot: string): Locator {
     return this.page.getByRole('row').filter({ hasText: providerName }).filter({ hasText: slot });
+  }
+
+  appointmentReason(providerName: string, slot: string, reason: string): Locator {
+    return this.appointment(providerName, slot).getByText(reason, { exact: true });
   }
 
   async cancelVisit(providerName: string, slot: string): Promise<void> {
