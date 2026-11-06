@@ -3,9 +3,9 @@
 ## Scope and observed flow
 
 - Requirement source: `requirements/auth.md` (BR-AUTH-01 through BR-AUTH-04).
-- Start each scenario signed out on `http://127.0.0.1:8096/#/login`. For the happy path use the Silver patient (`silver@parimipractice.test`) and its configured test credential.
+- Start each scenario signed out on `http://127.0.0.1:8096/#/login`. For the happy path use the Silver patient (`SILVER_PATIENT_EMAIL` from `.env`) and `SILVER_PATIENT_PASSWORD` from `.env`.
 - Live flow observed: submit email and password; the app opens `#/verify`, masks the destination email, and shows six separately labelled inputs (“Digit 1 of 6” through “Digit 6 of 6”), “Verify and continue”, “Resend code”, a five-minute countdown, and “Use a different account”. The test inbox is visible in the page.
-- Retrieve the newest message received after the sign-in attempt from `GET /api/dev/mailbox?email=silver%40parimipractice.test`; do not reuse older mailbox messages. Enter each digit in its corresponding box and verify. A valid code led to `#/patient/home` as Sam Rivera.
+- Retrieve the newest message received after the sign-in attempt from `GET /api/dev/mailbox?email=<URL-encoded SILVER_PATIENT_EMAIL>`; do not reuse older mailbox messages. Enter each digit in its corresponding box and verify. A valid code led to `#/patient/home` as Sam Rivera.
 - A partial entry submitted live showed “Enter all 6 digits.” A locked demo account was refused on the credential screen with “This account is locked. Contact your clinic administrator.”
 - Test expiry with a controlled clock or an expired-code fixture. Never wait five real minutes.
 

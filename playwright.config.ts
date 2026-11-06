@@ -1,4 +1,11 @@
+import { existsSync } from 'node:fs';
+import { loadEnvFile } from 'node:process';
 import { defineConfig, devices } from '@playwright/test';
+
+if (existsSync('.env')) loadEnvFile('.env');
+for (const name of ['SILVER_PATIENT_EMAIL', 'SILVER_PATIENT_PASSWORD']) {
+  if (!process.env[name]?.trim()) throw new Error(`${name} must be set in .env.`);
+}
 
 export default defineConfig({
   // Run the repository's Playwright tests from the tests directory.
@@ -19,11 +26,19 @@ export default defineConfig({
     // Keep a video only for failed tests.
     video: 'retain-on-failure',
   },
-  // Run exactly one browser project: Chromium.
+  // Authenticate once before any dependent browser tests.
   projects: [
     {
+      name: 'setup',
+      testMatch: /auth\.setup\.ts$/,
+      retries: 0,
+      use: { ...devices['Desktop Chrome'], trace: 'off', screenshot: 'off', video: 'off' },
+    },
+    {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
+      testIgnore: /auth\.setup\.ts$/,
+      use: { ...devices['Desktop Chrome'], storageState: '.auth/silver-patient.json' },
     },
   ],
 });

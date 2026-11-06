@@ -3,7 +3,7 @@ import { expect, type Locator, type Page } from '@playwright/test';
 export class BookingPage {
   private readonly dialog: Locator;
 
-  constructor(private readonly page: Page) {
+  constructor(private readonly page: Page, private readonly workerSlot = 0, private readonly workerCount = 1) {
     this.dialog = page.getByRole('dialog');
   }
 
@@ -23,6 +23,10 @@ export class BookingPage {
     await this.page.getByRole('link', { name: 'Find care', exact: true }).click();
   }
 
+  async closeIfOpen(): Promise<void> {
+    if (await this.dialog.isVisible()) await this.close();
+  }
+
   async close(): Promise<void> {
     await this.dialog.getByRole('button', { name: 'Close', exact: true }).click();
   }
@@ -37,9 +41,20 @@ export class BookingPage {
     if (!dateIso) throw new Error('Available calendar day must identify its date.');
     await this.loadSlots(() => day.click(), dateIso);
     // The previous date's buttons can remain visible while the new slots load.
-    const time = this.dialog.getByRole('group', { name: 'Available times' })
+    const times = this.dialog.getByRole('group', { name: 'Available times' })
       .locator(`button[data-start^="${dateIso}T"]`)
-      .and(this.dialog.getByRole('button', { disabled: false })).first();
+      .and(this.dialog.getByRole('button', { disabled: false }));
+    await expect(times.first()).toBeVisible();
+    // Partition by the immutable slot timestamp, never by the changing available-list index.
+    // parallelIndex is stable even when Playwright replaces a worker after failure.
+    const starts = await times.evaluateAll((buttons) => buttons.map((button) => button.getAttribute('data-start')!));
+    const start = starts.find((value) => {
+      let hash = 0;
+      for (const char of value) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+      return hash % this.workerCount === this.workerSlot;
+    });
+    if (!start) throw new Error('No available future slot in this worker partition.');
+    const time = times.filter({ visible: true }).and(this.dialog.locator(`button[data-start="${start}"]`));
     await expect(time).toBeVisible();
     const timeName = await time.innerText();
     await time.click();
