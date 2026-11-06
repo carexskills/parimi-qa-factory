@@ -35,7 +35,7 @@ export class BookingPage {
     if (!dateName) throw new Error('Available calendar day must have an accessible date.');
     const dateIso = await day.getAttribute('data-iso');
     if (!dateIso) throw new Error('Available calendar day must identify its date.');
-    await day.click();
+    await this.loadSlots(() => day.click(), dateIso);
     // The previous date's buttons can remain visible while the new slots load.
     const time = this.dialog.getByRole('group', { name: 'Available times' })
       .locator(`button[data-start^="${dateIso}T"]`)
@@ -51,7 +51,7 @@ export class BookingPage {
   }
 
   async finishBooking(): Promise<void> {
-    await this.dialog.getByRole('heading', { name: 'Visit booked', exact: true }).waitFor();
+    await expect(this.dialog.getByRole('heading', { name: 'Visit booked', exact: true })).toBeVisible();
     await this.dialog.getByRole('button', { name: 'Done', exact: true }).click();
   }
 
@@ -74,7 +74,7 @@ export class BookingPage {
     this.page.once('dialog', acceptCancellation);
     try {
       await visit.getByRole('button', { name: 'Cancel visit', exact: true }).click();
-      await expect(visit).toHaveCount(0);
+      await expect(visit).toBeHidden();
     } finally {
       this.page.removeListener('dialog', acceptCancellation);
     }
@@ -82,20 +82,24 @@ export class BookingPage {
 
   async openFor(providerName: string): Promise<void> {
     const provider = this.page.getByRole('article').filter({ hasText: providerName });
-    await provider.getByRole('button', { name: 'Book' }).click();
-    await this.dialog.getByRole('heading', { name: new RegExp(`Book with ${providerName}`) }).waitFor({ state: 'visible' });
+    await this.loadSlots(() => provider.getByRole('button', { name: 'Book' }).click());
+    await expect(this.dialog.getByRole('heading', { name: new RegExp(`Book with ${providerName}`) })).toBeVisible();
   }
 
   async chooseVisitType(visitType: 'In person' | 'Video visit'): Promise<void> {
     await this.dialog.getByRole('radio', { name: visitType }).check();
   }
 
-  async chooseDate(date: string): Promise<void> {
-    await this.dialog.getByRole('button', { name: date, exact: true }).click();
-  }
-
-  async chooseTime(time: string): Promise<void> {
-    await this.dialog.getByRole('button', { name: time, exact: true }).click();
+  private async loadSlots(click: () => Promise<void>, dateIso?: string): Promise<void> {
+    const slotsResponse = this.page.waitForResponse((response) => {
+      const url = new URL(response.url());
+      return /\/providers\/[^/]+\/slots$/.test(url.pathname)
+        && response.request().method() === 'GET'
+        && response.ok()
+        && (!dateIso || url.searchParams.get('date') === dateIso);
+    });
+    await click();
+    await slotsResponse;
   }
 
   async enterReason(reason: string): Promise<void> {
