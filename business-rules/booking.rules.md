@@ -44,8 +44,8 @@ Severity: High
 
 ## BR-BOOK-06 — Booking reason
 
-Every booking has a reason. An empty reason becomes “General visit”.
+Every booking has a reason. An empty reason becomes “General visit”. A reason of only spaces counts as empty.
 
-Boundary: If the reason is empty, use “General visit”.
+Boundary: If the reason is empty, use “General visit”. A reason of only spaces is empty too.
 
 Severity: Low

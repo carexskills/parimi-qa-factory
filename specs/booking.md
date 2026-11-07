@@ -7,7 +7,7 @@
 | BR-BOOK-03 | Cancellation is allowed through the visit start time, and refused from that time onward. | BR-BOOK-03-A (before start); BR-BOOK-03-B (after start; exact-start wording conflict noted below) |
 | BR-BOOK-04 | The $15.00 amount applies to Silver patients and standard visits, and must appear at all three stated points. | BR-BOOK-04-A (before booking); BR-BOOK-04-B (confirmation and receipt) |
 | BR-BOOK-05 | Applies to the visit time displayed on the confirmation. | BR-BOOK-05-A (Riverbend/Pacific display); BR-BOOK-05-B (different clinic timezone) |
-| BR-BOOK-06 | If the reason is empty, use “General visit”. | BR-BOOK-06-A (empty reason default); BR-BOOK-06-B (nonempty reason retained) |
+| BR-BOOK-06 | If the reason is empty or contains only spaces, use “General visit”. | BR-BOOK-06-A (empty reason default); BR-BOOK-06-B (spaces-only reason defaults); BR-BOOK-06-C (nonempty reason retained) |
 
 ## Coverage Notes
 
@@ -114,19 +114,27 @@ Plan based only on the approved rules in business-rules/booking.rules.md. Browse
 
 #### 1.11. BR-BOOK-06-A — @BR-BOOK-06 Empty booking reason defaults to General visit
 
-**File:** `(plan only)`
+**File:** `tests/booking/reason.spec.ts`
 
 **Steps:**
   1. Leave Reason for visit empty and confirm an otherwise valid booking.
     - expect: The booking/confirmation identifies the reason as “General visit”.
 
-#### 1.12. BR-BOOK-06-B — @BR-BOOK-06 Nonempty reason is retained
+#### 1.12. BR-BOOK-06-B — @BR-BOOK-06 Spaces-only booking reason defaults to General visit
 
-**File:** `(plan only)`
+**File:** `tests/booking/reason.spec.ts`
+
+**Steps:**
+  1. Enter a reason containing only spaces and confirm an otherwise valid booking.
+    - expect: The booking/confirmation identifies the reason as “General visit”.
+
+#### 1.13. BR-BOOK-06-C — @BR-BOOK-06 Nonempty reason is retained
+
+**File:** `tests/booking/reason.spec.ts`
 
 **Steps:**
   1. Enter a distinctive nonempty reason and confirm an otherwise valid booking.
-    - expect: The booking has a non-empty reason.
+    - expect: The booking identifies the reason as the distinctive nonempty reason entered.
 
 ---
 Approved by Suresh Parimi, 3 November 2026: both sides of every BR-BOOK boundary planned; gaps go to the product owner.
