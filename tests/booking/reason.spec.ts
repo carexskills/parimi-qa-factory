@@ -3,7 +3,7 @@
 import { expect, test } from '../../fixtures/patient.js';
 
 test.describe('Booking a visit', () => {
-  test('BR-BOOK-06-A — @BR-BOOK-06 Empty booking reason defaults to General visit', async ({ signedInSilverPatient, bookingPage, bookingCleanup }) => {
+  test('CASE-BOOK-06-02 — @BR-BOOK-06 Empty booking reason defaults to General visit', async ({ signedInSilverPatient, bookingPage, bookingCleanup }) => {
     void signedInSilverPatient;
     // 1. Leave Reason for visit empty and confirm an otherwise valid booking.
     await test.step('Open Find care', async () => {
@@ -34,7 +34,7 @@ test.describe('Booking a visit', () => {
     });
   });
 
-  test('BR-BOOK-06-B — @BR-BOOK-06 Spaces-only booking reason defaults to General visit', async ({ signedInSilverPatient, bookingPage, bookingCleanup }) => {
+  test('CASE-BOOK-06-03 — @BR-BOOK-06 Spaces-only booking reason defaults to General visit', async ({ signedInSilverPatient, bookingPage, bookingCleanup }) => {
     test.fail(true, 'PP-103: spaces-only booking reason is not defaulted to General visit');
     test.info().annotations.push({
       type: 'PP-103',
@@ -75,7 +75,7 @@ test.describe('Booking a visit', () => {
     });
   });
 
-  test('BR-BOOK-06-C — @BR-BOOK-06 Nonempty booking reason is retained', async ({ signedInSilverPatient, bookingPage, bookingCleanup }) => {
+  test('CASE-BOOK-06-01 — @BR-BOOK-06 Nonempty booking reason is retained', async ({ signedInSilverPatient, bookingPage, bookingCleanup }) => {
     void signedInSilverPatient;
     const reason = 'BR-BOOK-06 reason retained';
     // Open Find care to begin a valid booking

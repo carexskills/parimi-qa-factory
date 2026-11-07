@@ -2,7 +2,7 @@
 import { expect, test } from '../../fixtures/patient.js';
 
 test.describe('Booking a visit', () => {
-  test('BR-BOOK-04-A — @BR-BOOK-04 Silver standard price before booking', async ({ signedInSilverPatient, bookingPage }) => {
+  test('CASE-BOOK-04-01 — @BR-BOOK-04 Silver standard price before booking', async ({ signedInSilverPatient, bookingPage }) => {
     void signedInSilverPatient;
     // 1. As the signed-in Silver patient, choose a standard visit and inspect its price before confirming.
     await test.step('Open Find care', async () => {
