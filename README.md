@@ -32,7 +32,7 @@ The 52 tags:
 - Section 6: `s6-l1` to `s6-l6`, `s6-mp6-start`, `s6-mp6`
 
 `sN-mpN-start` is where mini project N starts (brief and walkthrough). `sN-mpN` is the end of its walkthrough. Lessons 2.5a and 3.2a change no project files, so they have no tag of their own.
-The tags from Section 2 onward have a `package.json`: run `npm ci` after you check one out. From `s2-l5` onward, `npx playwright test tests/seed.spec.ts` runs the seed test (the app must be running on port 8096).
+The tags from Section 2 onward have a `package.json`: run `npm ci` after you check one out. From `s2-l5` onward, `npx playwright test tests/seed.spec.ts` runs the seed test (the app must be running on port 8096). From `s6-l4` onward the Playwright config also needs a `.env` with `SILVER_PATIENT_EMAIL` and `SILVER_PATIENT_PASSWORD` (the demo values in the Setup Guide, step 4).
 
 The full lesson history is on the `course-history` branch. `main` is the setup starter that the Setup section clones: the project files of `s4-l8` (end of lesson 4.8), plus this README and the CI change below.
 
