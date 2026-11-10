@@ -1,0 +1,13 @@
+# Codex settings for this repo. Workspace edits only; network on so agents can open ParimiPractice.
+sandbox_mode = "workspace-write"
+approval_policy = "never"
+
+[sandbox_workspace_write]
+network_access = true
+
+# The Playwright browser, connected through MCP (installed properly in lesson 2.4)
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest", "--isolated", "--browser", "chromium"]
+default_tools_approval_mode = "approve"
+env_vars = ["DISPLAY", "PLAYWRIGHT_BROWSERS_PATH"]

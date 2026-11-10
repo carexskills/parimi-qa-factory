@@ -1,0 +1,24 @@
+{
+  "name": "parimi-qa-factory",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "verify:agents": "node scripts/verify-agents.cjs",
+    "verify": "node scripts/verify.cjs",
+    "env:up": "bash scripts/env.sh up",
+    "env:down": "bash scripts/env.sh down",
+    "env:status": "bash scripts/env.sh status",
+    "phi:scan": "node scripts/phi-scan.cjs",
+    "trace": "node scripts/trace-matrix.cjs",
+    "drift": "node --env-file-if-exists=.env scripts/drift-check.cjs",
+    "factory:mode": "node --env-file-if-exists=.env -e \"const mode = process.env.FACTORY_MODE === 'key' ? 'key' : 'no-key'; console.log(mode === 'key' ? 'key mode' : 'no-key mode (agents use your ChatGPT sign-in)'); if (mode === 'key') console.log('OPENAI_API_KEY is ' + (process.env.OPENAI_API_KEY ? 'set' : 'not set'));\"",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report reports"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0"
+  }
+}

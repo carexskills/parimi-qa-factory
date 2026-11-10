@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if ! gitleaks protect --staged --redact; then
+  echo "Commit blocked: secret found." >&2
+  exit 1
+fi

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "patients": [
+    {
+      "id": "seed-v1-patient-001",
+      "firstName": "Avery",
+      "lastName": "Sample",
+      "name": "Avery Sample",
+      "email": "avery.sample@parimipractice.test"
+    },
+    {
+      "id": "seed-v1-patient-002",
+      "firstName": "Jordan",
+      "lastName": "Example",
+      "name": "Jordan Example",
+      "email": "jordan.example@parimipractice.test"
+    },
+    {
+      "id": "seed-v1-patient-003",
+      "firstName": "Riley",
+      "lastName": "Demo",
+      "name": "Riley Demo",
+      "email": "riley.demo@parimipractice.test"
+    }
+  ]
+}
